@@ -102,7 +102,18 @@
 		if ok then
 			return mod
 		else
-			package.loaded = loaded
+			-- remove new key
+			for _i, k in ipairs(table.keys(package.loaded)) do
+				if loaded[k] ~= package.loaded[k] then
+					package.loaded[k] = nil
+				end
+			end
+			-- restore previous states
+			for k, v in pairs(loaded) do
+				if package.loaded[k] ~= v then
+					package.loaded[k] = v
+				end
+			end
 			return nil
 		end
 	end
